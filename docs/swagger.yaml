@@ -1,0 +1,172 @@
+definitions:
+  gin.H:
+    additionalProperties: {}
+    type: object
+  github_com_ismailOzone_GO-BOOKS-PROJECT_pkg_books_models.Book:
+    properties:
+      author:
+        type: string
+      id:
+        type: string
+      language:
+        type: string
+      name:
+        type: string
+      year:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /book/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a book with the specified ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+      summary: Delete a book
+      tags:
+      - Books
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a book by its ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: object
+      summary: Get a book by ID
+      tags:
+      - Books
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing book
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Book object
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_ismailOzone_GO-BOOKS-PROJECT_pkg_books_models.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: object
+      summary: Update a book
+      tags:
+      - Books
+  /books:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      summary: Get a list of books
+      tags:
+      - Books
+    post:
+      consumes:
+      - application/json
+      description: Endpoint to create a Book
+      parameters:
+      - description: Book
+        in: body
+        name: Books
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_ismailOzone_GO-BOOKS-PROJECT_pkg_books_models.Book'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Book created successfully
+          schema:
+            type: string
+        "404":
+          description: Book could not be created
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create a Book
+      tags:
+      - Books
+swagger: "2.0"
