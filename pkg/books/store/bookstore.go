@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/ismailOzone/GO-BOOKS-PROJECT/pkg/books/models"
 	"github.com/ismailOzone/GO-BOOKS-PROJECT/pkg/common/database"
@@ -69,29 +70,6 @@ func (s *BookStore) Deletebook(c *context.Context, bookid string) error {
 	return errors.Wrap(err,"error deleting from es")
 }
 
-// func (s *BookStore)  Getbooks(c *context.Context) ([]*models.Book, error){
-
-// 	var buf bytes.Buffer
-
-// 	searchResult, err := s.elasticClient.Search(c, buf , s.index)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	var books []*models.Book
-// 	for _, hit := range searchResult.Hits.Hits {
-// 		var book models.Book
-// 		if err := json.Unmarshal(hit.Source, &book); err != nil {
-// 			return nil, err
-// 		}
-// 		books = append(books, &book)
-// 	}
-
-// 	return books, nil
-// }
-
-// ...
-
 func (s *BookStore) Getbooks(c *context.Context) ([]*models.Book, error) {
 	var buf bytes.Buffer
 	ctx:=context.Background()
@@ -127,45 +105,11 @@ func (s *BookStore) Getbooks(c *context.Context) ([]*models.Book, error) {
 }
 
 
-// func (s *BookStore) GetBookByID(c *context.Context, bookID string) (*models.Book, error) {
-// 	ctx := context.Background()
-// 	var buf bytes.Buffer
-// 	// Create a query to search for a specific book by ID
-// 	query := elastic.NewTermQuery("_id", bookID)
-
-// 	// Execute the search query
-// 	searchResult, err := s.elasticClient.Search(&ctx, buf , s.index).
-// 		Query(query).
-// 		Do(ctx)
-// 	if err != nil {
-// 		return nil, errors.Wrap(err, "error doing search from Elasticsearch")
-// 	}
-
-// 	// Check if any hits were found
-// 	if searchResult.Hits.TotalHits.Value == 0 {
-// 		return nil, fmt.Errorf("book not found")
-// 	}
-
-// 	// Retrieve the book from the search result
-// 	hit := searchResult.Hits.Hits[0]
-
-// 	// Unmarshal the book source into a models.Book struct
-// 	var book models.Book
-// 	if err := json.Unmarshal(hit.Source, &book); err != nil {
-// 		return nil, errors.Wrap(err, "error decoding result from Elasticsearch")
-// 	}
-
-// 	book.ID = hit.Id
-
-// 	return &book, nil
-// }
-
-
 func (s *BookStore) GetbookByID(c *context.Context, bookID string) (*models.Book, error) {
 	should := make([]interface{}, 0, 1)
 	should = append(should, map[string]interface{}{
 		"match": map[string]interface{}{
-			"userid": bookID,
+			"_id": bookID,
 		},
 	})
 
@@ -184,7 +128,7 @@ func (s *BookStore) GetbookByID(c *context.Context, bookID string) (*models.Book
 		return nil, err
 	}
 
-	// defer resBody.Close()
+	log.Printf("********", resBody)
 
 	var hits struct {
 		Hits struct {
