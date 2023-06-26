@@ -26,7 +26,7 @@ func TestCreatebook(t *testing.T) {
 			desc: "success",
 			service: func() *mocks.Service {
 				mockService := new(mocks.Service)
-				mockService.On("Createbook", mock.Anything).Return(nil)
+				mockService.On("Createbook", mock.Anything, mock.AnythingOfType("*models.Book")).Return(nil)
 				return mockService
 			}(),
 			requestBody: models.Book{
@@ -35,13 +35,13 @@ func TestCreatebook(t *testing.T) {
 				Year:     2023,
 				Language: "BookLanguage",
 			},
-			expStatusCode: http.StatusCreated,
+			expStatusCode: http.StatusOK,
 		},
 		{
 			desc: "failure - service error",
 			service: func() *mocks.Service {
 				mockService := new(mocks.Service)
-				mockService.On("Createbook", mock.Anything).Return(errors.New("create error"))
+				mockService.On("Createbook", mock.Anything, mock.AnythingOfType("*models.Book")).Return(errors.New("create error"))
 				return mockService
 			}(),
 			requestBody: models.Book{

@@ -20,7 +20,7 @@ func main(){
 	}
 	router := gin.New()
 	router.Use(gin.Logger())
-	//routes.AuthenticationRoutes(router)
+	// routes.AuthenticationRoutes(router)
 	log.Println("Starting Init")
 	routes.BookRoutes(router)
 	log.Println("Started server")

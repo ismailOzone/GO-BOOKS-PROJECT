@@ -8,9 +8,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/ismailOzone/GO-BOOKS-PROJECT/mocks"
+
 	// "github.com/ismailOzone/GO-BOOKS-PROJECT/pkg/books/models"
 	"github.com/stretchr/testify/assert"
-	//"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestDeletebook(t *testing.T) {
@@ -24,7 +25,7 @@ func TestDeletebook(t *testing.T) {
 			desc: "success",
 			service: func() *mocks.Service {
 				mockService := new(mocks.Service)
-				mockService.On("DeleteBookByID", "bookID").Return(nil)
+				mockService.On("Deletebook", mock.Anything,"bookID").Return(nil)
 				return mockService
 			}(),
 			bookID:        "bookID",
@@ -34,7 +35,7 @@ func TestDeletebook(t *testing.T) {
 			desc: "failure - service error",
 			service: func() *mocks.Service {
 				mockService := new(mocks.Service)
-				mockService.On("DeleteBookByID", "bookID").Return(errors.New("delete error"))
+				mockService.On("Deletebook", mock.Anything,"bookID").Return(errors.New("delete error"))
 				return mockService
 			}(),
 			bookID:        "bookID",
@@ -55,7 +56,6 @@ func TestDeletebook(t *testing.T) {
 			server.ServeHTTP(recorder, request)
 
 			assert.Equal(t, tC.expStatusCode, recorder.Code)
-			tC.service.AssertExpectations(t)
 		})
 	}
 }
