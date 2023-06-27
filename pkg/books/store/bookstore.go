@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+	// "log"
 
 	"github.com/ismailOzone/GO-BOOKS-PROJECT/pkg/books/models"
 	"github.com/ismailOzone/GO-BOOKS-PROJECT/pkg/common/database"
@@ -128,7 +128,7 @@ func (s *BookStore) GetbookByID(c *context.Context, bookID string) (*models.Book
 		return nil, err
 	}
 
-	log.Printf("********", resBody)
+	// log.Printf("********", resBody)
 
 	var hits struct {
 		Hits struct {

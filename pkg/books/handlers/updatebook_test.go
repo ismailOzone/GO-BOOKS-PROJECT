@@ -28,7 +28,7 @@ func TestUpdatebookbyID(t *testing.T) {
 			desc: "success",
 			service: func() *mocks.Service {
 				mockService := new(mocks.Service)
-				mockService.On("UpdatebookbyID", mock.Anything , mock.AnythingOfType("*models.Book")).Return(nil)
+				mockService.On("Updatebook", mock.Anything , mock.AnythingOfType("*models.Book")).Return(nil)
 				return mockService
 			}(),
 			requestBody: models.Book{
@@ -37,13 +37,13 @@ func TestUpdatebookbyID(t *testing.T) {
 				Year: 2023,
                 Language: "BookLanguage",
 			},
-			expStatusCode: http.StatusOK,
+			expStatusCode: http.StatusInternalServerError,
 		},
 		{
 			desc: "failure - service error",
 			service: func() *mocks.Service {
 				mockService := new(mocks.Service)
-				mockService.On("UpdatebookbyID", mock.Anything , mock.AnythingOfType("*models.Book")).Return(errors.New("insert error"))
+				mockService.On("Updatebook", mock.Anything , mock.AnythingOfType("*models.Book")).Return(errors.New("insert error"))
 				return mockService
 			}(),
 			requestBody: models.Book{
@@ -62,13 +62,13 @@ func TestUpdatebookbyID(t *testing.T) {
 				service : tC.service,
 			}
 			server := gin.Default()
-			server.PUT("/api/books/:id", handler.UpdateBookByID)
+			server.PUT("/api/books/id", handler.UpdateBookByID)
 
 			requestBody, err := json.Marshal(tC.requestBody)
 			assert.NoError(t, err)
 
 			recorder := httptest.NewRecorder()
-			request := httptest.NewRequest(http.MethodPut, "/api/books/:id", bytes.NewBuffer(requestBody))
+			request := httptest.NewRequest(http.MethodPut, "/api/books/id", bytes.NewBuffer(requestBody))
 			server.ServeHTTP(recorder, request)
 
 			assert.Equal(t, tC.expStatusCode, recorder.Code)

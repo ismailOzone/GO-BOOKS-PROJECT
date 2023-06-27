@@ -25,6 +25,7 @@ type Env struct {
 	RefreshTokenSecret     string `mapstructure:"REFRESH_TOKEN_SECRET"`
 	ElasticUsername        string `mapstructure:"ELASTICSEARCH_USERNAME"`
 	ElasticPassword        string `mapstructure:"ELASTICSEARCH_PASSWORD"`
+	SecretKey              string `mapstructure:"SECRET_KEY"`
 }
 
 var cfg *Env
