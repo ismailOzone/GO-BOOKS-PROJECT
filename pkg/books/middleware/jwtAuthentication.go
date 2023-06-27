@@ -4,12 +4,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
+	// "log"
 	"net/http"
 	"time"
 
 	"github.com/elastic/go-elasticsearch/v7"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/ismailOzone/GO-BOOKS-PROJECT/config"
 	"github.com/ismailOzone/GO-BOOKS-PROJECT/pkg/books/models"
 
 	// "github.com/spf13/afero/internal/common"
@@ -25,13 +28,16 @@ func RequiredAuth( c *gin.Context){
     if tokenString == "" {
         c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization token not found"})
     }
+
+	cfg:= config.Get()
+
     // validate
         //parse takes the token string and a function for looking up the key
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
             return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
         }
-        return ([]byte("SECRET")), nil
+        return  []byte(cfg.SecretKey), nil
     })
     if err != nil {
         c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
@@ -43,7 +49,6 @@ func RequiredAuth( c *gin.Context){
         }
         // Find the user with token
         var user models.User
-        // config.DB.First(&user, claims["sub"])
 		database.ConnectElasticsearch()
 
 		// Construct the search request
@@ -64,7 +69,7 @@ func RequiredAuth( c *gin.Context){
 		}
 
 		res, err := esClient.Search(
-			esClient.Search.WithIndex("books"),
+			esClient.Search.WithIndex("users"),
 			esClient.Search.WithBody(buf),
 		)
 		if err != nil {
