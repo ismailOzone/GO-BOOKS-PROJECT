@@ -1,3 +1,4 @@
+basePath: /\
 definitions:
   gin.H:
     additionalProperties: {}
@@ -15,8 +16,12 @@ definitions:
       year:
         type: integer
     type: object
+host: localhost:9000
 info:
   contact: {}
+  description: This is a sample Rest API server.
+  title: Go + Gin + Gorm User API
+  version: "1.0"
 paths:
   /book/{id}:
     delete:

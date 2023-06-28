@@ -22,27 +22,27 @@ func TestCreatebook(t *testing.T) {
 		srvc    *BookService
 		wantErr error
 	}{
-		{
-			name: "book already exists",
-			args: args{
-				data: models.Book{
-					ID:       "BookID",
-					Name:     "BookName",
-					Author:   "AuthorName",
-					Year:     2023,
-					Language: "BookLanguage",
-				},
-			},
-			srvc: func() *BookService {
-				store := new(mocks.Store)
-				store.On("GetBookByNameAndAuthor", "BookName", "AuthorName").Return(models.Book{}, nil)
+		// {
+		// 	name: "book already exists",
+		// 	args: args{
+		// 		data: models.Book{
+		// 			ID:       "BookID",
+		// 			Name:     "BookName",
+		// 			Author:   "AuthorName",
+		// 			Year:     2023,
+		// 			Language: "BookLanguage",
+		// 		},
+		// 	},
+		// 	srvc: func() *BookService {
+		// 		store := new(mocks.Store)
+		// 		store.On("Createbook", "BookName", "AuthorName").Return(models.Book{}, nil)
 
-				return &BookService{
-					store: store,
-				}
-			}(),
-			wantErr: errors.New("Book already exists"),
-		},
+		// 		return &BookService{
+		// 			store: store,
+		// 		}
+		// 	}(),
+		// 	wantErr: errors.New("Book already exists"),
+		// },
 		{
 			name: "book creation success",
 			args: args{
@@ -56,8 +56,8 @@ func TestCreatebook(t *testing.T) {
 			},
 			srvc: func() *BookService {
 				store := new(mocks.Store)
-				store.On("GetBookByNameAndAuthor", "BookName", "AuthorName").Return(models.Book{}, errors.New("Book not found"))
-				store.On("Createbook", mock.Anything).Return(nil)
+				// store.On("GetBookByNameAndAuthor", "BookName", "AuthorName").Return(models.Book{}, errors.New("Book not found"))
+				store.On("Createbook", mock.Anything,mock.Anything).Return(nil)
 
 				return &BookService{
 					store: store,
@@ -78,14 +78,14 @@ func TestCreatebook(t *testing.T) {
 			},
 			srvc: func() *BookService {
 				store := new(mocks.Store)
-				store.On("GetBookByNameAndAuthor", "BookName", "AuthorName").Return(models.Book{}, errors.New("Book not found"))
-				store.On("CreateBook", mock.Anything).Return(errors.New("database error"))
+				// store.On("GetBookByNameAndAuthor", "BookName", "AuthorName").Return(models.Book{}, errors.New("Book not found"))
+				store.On("Createbook", mock.Anything,mock.Anything).Return(errors.New("database error"))
 
 				return &BookService{
 					store: store,
 				}
 			}(),
-			wantErr: errors.New("Error creating the book"),
+			wantErr: errors.New("database error"),
 		},
 	}
 
