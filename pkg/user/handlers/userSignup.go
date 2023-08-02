@@ -47,7 +47,7 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	indexName := "users"
+	indexName := "books"
 
 	if err := db.Index(&ctx, buf, indexName, ""); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

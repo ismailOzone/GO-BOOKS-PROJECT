@@ -56,7 +56,6 @@ func TestCreatebook(t *testing.T) {
 			},
 			srvc: func() *BookService {
 				store := new(mocks.Store)
-				// store.On("GetBookByNameAndAuthor", "BookName", "AuthorName").Return(models.Book{}, errors.New("Book not found"))
 				store.On("Createbook", mock.Anything,mock.Anything).Return(nil)
 
 				return &BookService{

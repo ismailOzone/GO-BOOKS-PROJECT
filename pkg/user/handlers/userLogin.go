@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"log"
 
 	// "log"
 	"net/http"
@@ -42,16 +43,16 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to encode user",
 		})
-		// log.Printf("sssssssssssss", body.Email)
 		return
 	}
 
-	indexName := "users"
+	indexName := "books"
 	res, err := db.Search(&ctx, buf, indexName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to search for user",
 		})
+		log.Printf("zzzzzzzz",res)
 		return
 	}
 	defer res.Close()
